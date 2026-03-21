@@ -1,0 +1,15 @@
+packages:
+  "framer-motion": "For highly polished, MZ-style bouncy animations and page transitions"
+  "canvas-confetti": "To celebrate the lotto result generation"
+  "@types/canvas-confetti": "Type definitions for canvas-confetti"
+  "clsx": "For conditional tailwind classes in generic components"
+  "tailwind-merge": "To properly merge tailwind classes"
+
+images:
+  - path: "artifacts/lotto-app/public/images/mesh-bg.png"
+    description: "Vibrant dark mode cyberpunk gradient mesh background with neon pink, deep purple, and electric blue hues, abstract soft blur, highly trendy"
+    aspect_ratio: "16:9"
+
+notes:
+  - The form relies on useGenerateLottoNumbers mutation from @workspace/api-client-react
+  - Results are passed from the input page to the result page via sessionStorage to keep URLs clean while preserving the complex nested result object
