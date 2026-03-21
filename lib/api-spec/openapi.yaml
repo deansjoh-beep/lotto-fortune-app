@@ -1,0 +1,162 @@
+openapi: 3.1.0
+info:
+  title: Api
+  version: 0.1.0
+  description: API specification
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: lotto
+    description: Lotto number generation based on fortune
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      description: Returns server health status
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+  /lotto/generate:
+    post:
+      operationId: generateLottoNumbers
+      tags: [lotto]
+      summary: Generate lucky lotto numbers based on birth info
+      description: Generates lotto numbers based on birth date and time using fortune calculation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BirthInfo"
+      responses:
+        "200":
+          description: Generated lotto numbers with fortune analysis
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LottoResult"
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+    BirthInfo:
+      type: object
+      properties:
+        year:
+          type: integer
+          minimum: 1900
+          maximum: 2006
+          description: Birth year
+        month:
+          type: integer
+          minimum: 1
+          maximum: 12
+          description: Birth month
+        day:
+          type: integer
+          minimum: 1
+          maximum: 31
+          description: Birth day
+        hour:
+          type: integer
+          minimum: 0
+          maximum: 23
+          description: Birth hour (0-23)
+      required:
+        - year
+        - month
+        - day
+        - hour
+    LottoResult:
+      type: object
+      properties:
+        numbers:
+          type: array
+          items:
+            type: integer
+          minItems: 6
+          maxItems: 6
+          description: Six lucky lotto numbers (1-45)
+        bonusNumber:
+          type: integer
+          description: Bonus number
+        fortuneElement:
+          type: string
+          description: Fortune element (wood, fire, earth, metal, water in Korean)
+        fortuneScore:
+          type: integer
+          minimum: 1
+          maximum: 100
+          description: Overall fortune score
+        fortuneMessage:
+          type: string
+          description: Personalized fortune message
+        luckyColor:
+          type: string
+          description: Lucky color for today
+        luckyDirection:
+          type: string
+          description: Lucky direction
+        zodiacSign:
+          type: string
+          description: Korean zodiac sign
+        analysisDetails:
+          type: object
+          properties:
+            heavenlyStem:
+              type: string
+              description: Heavenly stem of birth year
+            earthlyBranch:
+              type: string
+              description: Earthly branch of birth year
+            lifeNumber:
+              type: integer
+              description: Life path number from numerology
+            birthElement:
+              type: string
+              description: Birth element based on year
+          required:
+            - heavenlyStem
+            - earthlyBranch
+            - lifeNumber
+            - birthElement
+      required:
+        - numbers
+        - bonusNumber
+        - fortuneElement
+        - fortuneScore
+        - fortuneMessage
+        - luckyColor
+        - luckyDirection
+        - zodiacSign
+        - analysisDetails
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+      required:
+        - error
+        - message
